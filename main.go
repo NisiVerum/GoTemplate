@@ -4,6 +4,7 @@ import (
 	"/errorhandling"
 	"fmt"
 	"time"
+	"strings"
 )
 
 func main() {
@@ -11,11 +12,15 @@ func main() {
 	startTime := time.Now()
 	result := errorhandling.Success
 
-	// Code here...
+	// --> Your code here...
 	fmt.Println("Hello World!")
 
 	// End time for time measurement
 	durationTime := time.Since(startTime)
 
-	fmt.Printf("%s, Finished in %v\n", result, durationTime)
+	fmt.Printf("\n%s: %s, Finished in %v\n", result.ErrorCode(), result.ErrorMessage(), durationTime)
+	if result != errorhandling.Success {
+		line := strings.Repeat("-", 5)
+		fmt.Printf("\n%s Error information %s\n%s\n", line, line, result.ErrorDetails())
+	}
 }
