@@ -146,7 +146,7 @@ package main
 
 import (
 	"fmt"
-	"errorhandling"  // Import the errorhandling package
+	"GoTemplate/errorhandling"  // Import the errorhandling package
 )
 
 func main() {
@@ -220,7 +220,7 @@ package main
 
 import (
 	"fmt"
-	"errorhandling"
+	"GoTemplate/errorhandling"
 )
 
 func main() {
@@ -280,7 +280,7 @@ package main
 
 import (
 	"fmt"
-	"errorhandling"
+	"GoTemplate/errorhandling"
 )
 
 func main() {
@@ -314,7 +314,7 @@ package main
 import (
 	"fmt"
 	"reflect"
-	"errorhandling"
+	"GoTemplate/errorhandling"
 )
 
 func main() {
