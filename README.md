@@ -1,7 +1,34 @@
+# Table of Contents
+
+- [GoTemplate](#gotemplate)
+  - [Things to do after getting GoTemplate](#things-to-do-after-getting-gotemplate)
+    - [Linux/MacOS](#linuxmacos)
+    - [Windows](#windows)
+  - [Build](#build)
+- [errorhandling package template](#errorhandling-package-template)
+  - [Overview](#overview)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [ErrorDetails Struct](#errordetails-struct)
+    - [Example](#example)
+    - [ErrorDetails Struct Fields](#errordetails-struct-fields)
+    - [Example of Defined Errors](#example-of-defined-errors)
+  - [Severity Levels](#severity-levels)
+    - [Example of Using Severity Levels](#example-of-using-severity-levels)
+  - [Methods](#methods)
+    - [ErrorMessage()](#errormessage)
+    - [ErrorCode()](#errorcode)
+    - [ErrorSeverityLevel()](#errorseveritylevel)
+    - [ErrorDetails()](#errordetails)
+  - [Reflection](#reflection)
+  - [Conclusion](#conclusion)
+
+---
+
 # GoTemplate
 A template for a good start into new Go projects.
 
-## Things to do after cloning
+## Things to do after getting GoTemplate
 <details>
   <summary><b>Linux/MacOS</b></summary>
 
@@ -11,7 +38,7 @@ A template for a good start into new Go projects.
   ```
   2. Prepare the project. Ensure the files located in right directory (Project name)
   3. Initialize the project
-  > NOTE
+  > NOTE: 
   > The initialize.sh has a parameter "-dg" for delete git. Use this parameter to disconnect from GoTemplates git.
   ``` shell
   ./initialize.sh -dg   # initializes and deletes .git
@@ -29,7 +56,7 @@ A template for a good start into new Go projects.
 
   1. Prepare the project. Ensure the files located in right directory (Project name)
   2. Initialize the project
-  > NOTE
+  > NOTE: 
   > The initialize.sh has a parameter "-dg" for delete git. Use this parameter to disconnect from GoTemplates git.
   ``` cmd
   REM initializes and deletes .git
@@ -50,124 +77,269 @@ A template for a good start into new Go projects.
 
 </br>
 
-# errorhandling package template
-The errorhandling package provides a standardized way to handle errors using an extendable set of error codes and corresponding messages. It defines a Result type that can be used to represent various error states within your Go application.
+# Build
+Build is simple. Just execute following:
 
-This package allows you to easily extend the set of error codes by adding new constants, and also to define custom error messages for those error codes.
+**Linux:**
+```
+./build.sh
+```
+
+**Windows:**
+```
+build.bat
+```
+
+**Results in following directory structure:**
+```
+├── build
+│   ├── Windows
+|   |   ├── x86
+|   |   |   └──ProjectName.exe
+|   |   └── x64
+|   |       └──ProjectName.exe
+│   ├── Linux
+|   |   ├── x86
+|   |   |   └──ProjectName
+|   |   └── x64
+|   |       └──ProjectName
+│   └── MacOS/ProjectName
+|       └── x64
+|           └──ProjectName
+```
+
+</br>
+
+---
+
+</br>
+
+# errorhandling package template
+
+This Go package provides a simple error handling mechanism using custom error details, including error codes, messages, and severity levels. The package defines error types, associated methods, and utilities for working with error details in a structured way.
 
 ## Overview
-The Result type is an integer that represents different states in your application. Each Result value is associated with a constant that indicates a specific error state. Additionally, the String() method for the Result type allows you to retrieve a human-readable error message associated with each error code.
 
-## Core Components
-### 1. Result Type
-The Result type is a custom type based on an int. This type is used to represent different error states throughout your application.
+The `errorhandling` package defines the `ErrorDetails` struct, which contains fields for an error code, message, and severity level. The severity level is represented using a custom type, `SeverityLevel`, which can be one of several predefined values.
 
-``` go
-type Result int
+### Features:
+- Define custom errors with error codes, messages, and severity.
+- Easily generate error descriptions using reflection.
+- Methods to retrieve error code, message, and severity.
+  
+## Installation
+
+To use this package, you can import it into your Go project as follows:
+
+```go
+import "path/to/your/repository/errorhandling"
 ```
-### 2. Error Constants
-The package defines a set of constants that represent various error states. These constants can be expanded as needed to add new error codes.
 
-``` go
-const (
-    Success    Result = 0x0000  // Indicates successful execution
-    ErrGeneral Result = 0x0001  // General error that occurred
+## ErrorDetails Struct
+
+The core of the package is the `ErrorDetails` struct. It represents an error with a code, message, and severity level.
+
+### Example:
+
+```go
+package main
+
+import (
+	"fmt"
+	"errorhandling"  // Import the errorhandling package
 )
-```
-You can add additional error constants as required by your application, such as ErrNetwork, ErrFileNotFound, etc.
-
-### 3. String Method
-The String() method is used to return a human-readable error message corresponding to a given Result value. The method uses a switch statement to map each Result to a predefined message.
-
-``` go
-func (r Result) String() string {
-    switch r {
-    case Success:
-        return "Success"
-    case ErrGeneral:
-        return "ErrGeneral"
-    default:
-        return "Unknown error occurred"
-    }
-}
-```
-The String() method can be used to easily print out the error message associated with a Result. If a new Result value is added, the switch statement should be updated to handle the new error code and return the appropriate message.
-
-### 4. Extendability
-The design of this package is flexible and extendable. Developers can add new error constants and update the String() method to handle the new error codes. For example:
-
-``` go
-const (
-    ErrNetwork  Result = 0x0002  // Error indicating a network issue
-    ErrTimeout  Result = 0x0003  // Error indicating a timeout
-)
-
-func (r Result) String() string {
-    switch r {
-    case Success:
-        return "Success"
-    case ErrGeneral:
-        return "ErrGeneral"
-    case ErrNetwork:
-        return "Network Error"
-    case ErrTimeout:
-        return "Timeout Error"
-    default:
-        return "Unknown error occurred"
-    }
-}
-```
-This allows for easy expansion of the error-handling capabilities as your application grows.
-
-## Usage
-### 1. Initializing Result
-In your Go files (such as main.go), you can start by initializing a Result variable to represent the current state of the application. You can use predefined constants like Success or ErrGeneral to indicate the status of an operation.
-
-Example:
-
-``` go
-result := errorhandling.Success  // Indicating successful execution
-// or
-result := errorhandling.ErrGeneral  // Indicating a general error
-```
-### 2. Setting Error States
-As the application progresses, you can change the value of the Result variable to reflect different error states. For example, if a network request fails, you can set:
-
-go
-Code kopieren
-result = errorhandling.ErrNetwork
-### 3. Displaying Error Messages
-When you want to display the error message associated with the Result value, you can use the String() method in combination with standard formatting functions like fmt.Printf to print the error message.
-
-#### Example:
-
-``` go
-fmt.Printf("Error: %s\n", result)  // Prints the string representation of the error
-```
-
-If result is set to errorhandling.ErrGeneral, the output will be:
-
-```
-Error: ErrGeneral
-```
-### 4. Combining Error Handling with Application Logic
-This pattern allows you to handle errors at specific points in your code and provide meaningful error messages. By using the Result type, you can ensure consistent error handling throughout your application.
-
-Example:
-
-``` go
-func someFunction() Result {
-    // Simulate an error condition
-    return errorhandling.ErrNetwork
-}
 
 func main() {
-    result := someFunction()
-    fmt.Printf("Operation result: %s\n", result)  // Output: Operation result: Network Error
+	// Create a new error instance
+	err := errorhandling.ErrGeneral
+
+	// Print error details
+	fmt.Println(err.ErrorDetails())   // Print all details of the error
+	fmt.Println(err.ErrorMessage())   // Get the error message
+	fmt.Println(err.ErrorCode())      // Get the error code in hexadecimal format
+	fmt.Println(err.ErrorSeverityLevel())  // Get the error severity level
 }
 ```
-Benefits of This Approach
-Centralized Error Management: All error codes and messages are defined in one place, making it easy to maintain and expand.
-Extendability: You can easily add new error codes and their corresponding messages without affecting the rest of the application.
-Consistency: Using the Result type across your application ensures consistent error handling and simplifies debugging.
-Readability: The String() method provides clear, human-readable error messages that can be printed or logged.
+
+### `ErrorDetails` Struct Fields
+
+- **Code**: An integer representing the error code.
+- **Message**: A string describing the error.
+- **Severity**: A string representing the severity level of the error.
+
+### Example of Defined Errors:
+
+The package includes predefined error instances:
+
+```go
+var (
+	Success = ErrorDetails{
+		Code:     0x0001,
+		Message:  "Success. No errors occurred.",
+		Severity: Severity.None,
+	}
+
+	ErrGeneral = ErrorDetails{
+		Code:     0x0002,
+		Message:  "General error occurred",
+		Severity: Severity.Low,
+	}
+)
+```
+
+## Severity Levels
+
+The `SeverityLevel` type defines various severity levels for errors. These levels can be used to categorize the seriousness of the error.
+
+```go
+var Severity = struct {
+	None     SeverityLevel
+	Low      SeverityLevel
+	Medium   SeverityLevel
+	High     SeverityLevel
+	Critical SeverityLevel
+}{
+	None:     "None",
+	Low:      "Low",
+	Medium:   "Medium",
+	High:     "High",
+	Critical: "Critical",
+}
+```
+
+- **None**: No error (success).
+- **Low**: A minor error or warning.
+- **Medium**: A moderate error that may require attention.
+- **High**: A serious error that needs prompt resolution.
+- **Critical**: A critical error that requires immediate attention.
+
+### Example of Using Severity Levels:
+
+```go
+package main
+
+import (
+	"fmt"
+	"errorhandling"
+)
+
+func main() {
+	// Create a critical error
+	criticalError := errorhandling.ErrorDetails{
+		Code:     0x0003,
+		Message:  "Critical system failure",
+		Severity: errorhandling.Severity.Critical,
+	}
+
+	// Print error details
+	fmt.Println(criticalError.ErrorDetails())   // Full error details
+	fmt.Println(criticalError.ErrorMessage())   // "Critical system failure"
+	fmt.Println(criticalError.ErrorCode())      // "0x0003"
+	fmt.Println(criticalError.ErrorSeverityLevel()) // "Critical"
+}
+```
+
+## Methods
+
+### `ErrorMessage() string`
+
+Returns the error message.
+
+```go
+func (e ErrorDetails) ErrorMessage() string
+```
+
+### `ErrorCode() string`
+
+Returns the error code in hexadecimal format (e.g., `0x0002`).
+
+```go
+func (e ErrorDetails) ErrorCode() string
+```
+
+### `ErrorSeverityLevel() string`
+
+Returns the severity level as a string.
+
+```go
+func (e ErrorDetails) ErrorSeverityLevel() string
+```
+
+### `ErrorDetails() string`
+
+Generates a detailed error string with all the error fields (`Code`, `Message`, and `Severity`), which can be useful for logging or debugging.
+
+```go
+func (e ErrorDetails) ErrorDetails() string
+```
+
+### Example:
+
+```go
+package main
+
+import (
+	"fmt"
+	"errorhandling"
+)
+
+func main() {
+	// Create a new error instance
+	err := errorhandling.ErrGeneral
+
+	// Output all error details
+	fmt.Println("Error Details:")
+	fmt.Println(err.ErrorDetails())
+
+	// Output error code
+	fmt.Println("Error Code:", err.ErrorCode())
+
+	// Output error message
+	fmt.Println("Error Message:", err.ErrorMessage())
+
+	// Output error severity
+	fmt.Println("Error Severity:", err.ErrorSeverityLevel())
+}
+```
+
+## Reflection
+
+The `ErrorDetails` struct also utilizes reflection to automatically generate error details. This allows you to easily iterate over all fields of the struct and print their names and values, including the custom fields like `Code`, `Message`, and `Severity`.
+
+Example of using reflection in the `ErrorDetails` struct:
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+	"errorhandling"
+)
+
+func main() {
+	// Create a new error instance
+	err := errorhandling.ErrGeneral
+
+	// Use reflection to print all error details
+	val := reflect.ValueOf(err)
+	for i := 0; i < val.NumField(); i++ {
+		field := val.Type().Field(i)
+		value := val.Field(i)
+
+		// Format the output for the Code field
+		if field.Name == "Code" {
+			fmt.Printf("%s: 0x%04X\n", field.Name, value.Interface())
+		} else {
+			// Print other fields
+			fmt.Printf("%s: %v\n", field.Name, value.Interface())
+		}
+	}
+}
+```
+
+## Conclusion
+
+This package provides a simple but flexible error handling mechanism in Go, allowing you to define custom errors with associated severity levels, messages, and codes. The utility functions and methods make it easy to generate detailed error descriptions and handle errors in a structured way.
+
+Feel free to extend the `ErrorDetails` struct with more fields or create additional predefined errors as needed. This package is designed to be lightweight and easy to integrate into any Go application.

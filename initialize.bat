@@ -18,7 +18,7 @@ if %errorlevel% equ 0 (
 
 REM Replace import path for errorhandling in main.go with the current directory name
 if exist main.go (
-    powershell -Command "(Get-Content main.go) -replace '\"/errorhandling', '\"%current_dir%/errorhandling' | Set-Content main.go"
+    owershell -Command "(Get-Content 'main.go') -replace '\"[^\"]*/errorhandling', '\"%current_dir%/errorhandling' | Set-Content 'main.go'"
     echo Import paths in main.go has been changed to '%current_dir%'.
 )
 

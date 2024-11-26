@@ -6,8 +6,8 @@ import(
 )
 
 type ErrorDetails struct {
-	Code    		int
-	Message 		string
+	Code    	int
+	Message 	string
 	Severity	SeverityLevel
 }
 
