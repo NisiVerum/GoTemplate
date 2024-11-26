@@ -39,7 +39,7 @@ A template for a good start into new Go projects.
   2. Prepare the project. Ensure the files located in right directory (Project name)
   3. Initialize the project
   > NOTE: 
-  > The initialize.sh has a parameter "-dg" for delete git. Use this parameter to disconnect from GoTemplates git.
+  > The initialize.sh has a parameter "-dg" for deleteing the git connection and the gitignore file. 
   ``` shell
   ./initialize.sh -dg   # initializes and deletes .git
   # or
@@ -57,7 +57,7 @@ A template for a good start into new Go projects.
   1. Prepare the project. Ensure the files located in right directory (Project name)
   2. Initialize the project
   > NOTE: 
-  > The initialize.sh has a parameter "-dg" for delete git. Use this parameter to disconnect from GoTemplates git.
+  > The initialize.sh has a parameter "-dg" for deleteing the git connection and the gitignore file. 
   ``` cmd
   REM initializes and deletes .git
   initialize.bat -dg
