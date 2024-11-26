@@ -1,7 +1,7 @@
 package main
 
 import (
-	"GoTemplate/errorhandling"
+	"/errorhandling"
 	"fmt"
 	"time"
 )

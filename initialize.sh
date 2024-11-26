@@ -14,6 +14,12 @@ else
     echo "If you want to disconnect git - use the parameter -dg (./initialize.sh -dg)"
 fi
 
+# Replace improt path for errorhandling in main.go with the current directory name
+if [ -f "main.go" ]; then
+    sed -i "s|\"/errorhandling|\"$current_dir/errorhandling|g" main.go
+    echo "Import paths in main.go has been changed to '$current_dir'."
+fi
+
 # Check if go.mod exists
 if [ -f "go.mod" ]; then
     rm go.mod
