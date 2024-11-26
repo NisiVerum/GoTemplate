@@ -134,6 +134,14 @@ To use this package, you can import it into your Go project as follows:
 ```go
 import "path/to/your/repository/errorhandling"
 ```
+Otherwise just execute:
+```
+./initialize.sh
+```
+or
+```
+initialize.bat
+```
 
 ## ErrorDetails Struct
 
