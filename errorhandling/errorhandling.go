@@ -6,22 +6,38 @@ import(
 )
 
 type ErrorDetails struct {
-	Code    	int
-	Message 	string
-	Severity	string
+	Code    		int
+	Message 		string
+	Severity	SeverityLevel
 }
 
-// Append this with your error codes
+type SeverityLevel string
+
+var Severity = struct {
+	None     SeverityLevel
+	Low      SeverityLevel
+	Medium   SeverityLevel
+	High     SeverityLevel
+	Critical SeverityLevel
+}{
+	None:     "None",
+	Low:      "Low",
+	Medium:   "Medium",
+	High:     "High",
+	Critical: "Critical",
+}
+
+// Append this with your error information
 var (
 	Success = ErrorDetails {
 		Code:		0x0001,
 		Message:	"Success. No errors occured.",
-		Severity:	"none",
+		Severity:	Severity.None,
 	}
 	ErrGeneral = ErrorDetails {
-		Code:	0x0002,
+		Code:		0x0002,
 		Message:	"General error occured",
-		Severity:	"Low",
+		Severity:	Severity.Low,
 	}
 )
 
@@ -36,8 +52,8 @@ func (e ErrorDetails) ErrorCode() string {
 }
 
 // Gets error severity
-func (e ErrorDetails) ErrorSeverity() string {
-	return e.Severity
+func (e ErrorDetails) ErrorSeverityLevel() string {
+	return string(e.Severity)
 }
 
 func (e ErrorDetails) ErrorDetails() string {
