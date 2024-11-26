@@ -9,6 +9,7 @@ if [[ " $* " == *" -dg "* ]]; then
     # After this 
     if [ -d ".git" ]; then
         rm -rf .git
+        rm -f .gitignore
     fi
 else
     echo "If you want to disconnect git - use the parameter -dg (./initialize.sh -dg)"

@@ -11,6 +11,7 @@ if %errorlevel% equ 0 (
     REM Check if .git directory exists and delete it if present
     if exist .git (
         rmdir /s /q .git
+        del /q .gitignore
     )
 ) else (
     echo If you want to disconnect git - use the parameter -dg (e.g., initialize.bat -dg)
